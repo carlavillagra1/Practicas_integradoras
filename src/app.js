@@ -18,4 +18,4 @@ mongoose.connect(process.env.MONGO_URL)
 app.use('/api/user', usersRouter)
 
 
-app.listen(port, console.log(`Server running on port`))
+app.listen(port, console.log(`Server running on port ${port}`))
