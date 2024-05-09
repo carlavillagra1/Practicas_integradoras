@@ -4,7 +4,6 @@ const usersRouter = require("./routes/users.router")
 const dotenv = require ('dotenv')
 dotenv.config()
 console.log(process.env.MONGO_URL)
-
 const app = express()
 const port = 8080
 
