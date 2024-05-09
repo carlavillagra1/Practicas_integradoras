@@ -1,5 +1,5 @@
 const express = require("express");
-const { default: mongoose } = require("mongoose");
+const mongoose  = require("mongoose");
 const usersRouter = require("./routes/users.router")
 const dotenv = require ('dotenv')
 dotenv.config()
@@ -12,8 +12,8 @@ app.use(express.json())
 
 
 mongoose.connect(process.env.MONGO_URL)
-    .then(() => { console.log("Conectado a la base de datos") })
-    .catch(console.error("Error en la conexion"))
+.then(() => { console.log("Conectado a la base de datos") })
+.catch(error => console.error("Error en la conexion", error))
 
 app.use('/api/user', usersRouter)
 
