@@ -1,5 +1,5 @@
 const express = require("express");
-const { default: userModel } = require("../models/user.models.js");
+const { default: userModel } = require("../dao/models/user.models.js");
 
 const router = express.Router()
 
