@@ -4,9 +4,8 @@ class productManagerMongo {
 
     async createProduct(title, description, price, thumbnail, code, stock) {
         try {
-            const create = await productModel.create({ title, description, price, thumbnail, code, stock })
+            const create = await productModel.create({title, description, price, thumbnail, code, stock})
             return create
-
         } catch (error) {
             throw new Error("Error al crear el producto")
         }
@@ -35,7 +34,7 @@ class productManagerMongo {
     }
     async updateProduct(id) {
         try {
-            const productUpdate = await productModel.updateOne(id)
+            const productUpdate = await productModel.updateOne({_id: id})
             return productUpdate
         } catch (error) {
             throw new Error("Error al modificar el producto")
@@ -44,7 +43,7 @@ class productManagerMongo {
     }
     async deleteProduct(id) {
         try {
-            const productDelete = await productModel.deleteOne(id)
+            const productDelete = await productModel.deleteOne({_id: id})
             return productDelete
         } catch (error) {
             throw new Error("Error al eliminar el producto")

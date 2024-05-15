@@ -1,7 +1,110 @@
 const express = require("express");
+const productManagerMongo = require("../dao/producManagerMDB.js");
+const productManager = new productManagerMongo();
+const router = express.Router();
+
+// Middleware para manejar errores
+router.use((error, req, res, next) => {
+    console.error(error);
+    res.status(500).json({ message: "Error interno del servidor" });
+});
+
+// Middleware para validar la entrada en la creación y actualización de productos
+function validateProduct(req, res, next) {
+    const { title, description, price, thumbnail, code, stock } = req.body;
+    if (!title || !description || !price || !thumbnail || !code || !stock) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+    }
+    next();
+}
+
+router.get('/', async (req, res) => {
+    try {
+        const products = await productManager.readProducts();
+        res.send({ result: "success", payload: products });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await productManager.getProductById(id);
+        if (!product) {
+            return res.status(404).json({ message: "Producto no encontrado" });
+        }
+        res.send({ result: "success", payload: product });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post('/', validateProduct, async (req, res, next) => {
+    try {
+        const { title, description, price, thumbnail, code, stock } = req.body;
+        const result = await productManager.createProduct(title, description, price, thumbnail, code, stock);
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put('/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await productManager.updateProduct(id);
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.delete('/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await productManager.deleteProduct(id);
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        next(error);
+    }
+});
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*const express = require("express");
 const productManager = require("../dao/producManagerMDB.js")
-
-
 const router = express.Router()
 
 router.get('/', async (req, res) => {
@@ -12,8 +115,9 @@ router.get('/', async (req, res) => {
         res.status(404).json({ message: "No se encontraron los productos" })
     }
 })
-router.get('/id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
+        const { id } = req.params
         const product = await productManager.getProductById(id)
         res.send({ result: "success", playload: product })
     } catch (error) {
@@ -28,15 +132,16 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ message: "Todos los campos son obligatorios" });
         }
         const result = await productManager.createProduct(title, description, price, thumbnail, code, stock);
+        console.log(result)
         res.send({ result: "success", payload: result });
 
     } catch (error) {
         res.status(500).json({ message: "No se pudo agregar el producto" });
     }
-});
-router.put('/id', async (req, res) => {
+})
+router.put('/:id', async (req, res) => {
     try {
-        let { id } = req.params
+        const { id } = req.params
         const result = await productManager.updateProduct(id)
         res.send({ result: "success", playload: result })
 
@@ -44,13 +149,13 @@ router.put('/id', async (req, res) => {
         res.status(404).json({ message: "No se pudo modificar el producto" })
     }
 })
-router.delete('/id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
-        let { id } = req.params
+        const { id } = req.params
         const result = await productManager.deleteProduct(id)
         res.send({ result: "success", playload: result })
     } catch (error) {
         res.status(404).json({ message: "No se borro el producto" })
     }
 })
-module.exports = router
+module.exports = router */

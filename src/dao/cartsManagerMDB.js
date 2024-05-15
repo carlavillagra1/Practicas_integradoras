@@ -1,6 +1,6 @@
 const cartsModel  = require("./models/carts.model.js")
 
-class cartManagerMDB{
+class cartManagerMongo{
     
     async createCart(){
         try {
@@ -38,4 +38,4 @@ class cartManagerMDB{
 
 }
 
-module.exports = cartManagerMDB
+module.exports = cartManagerMongo

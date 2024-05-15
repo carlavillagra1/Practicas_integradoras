@@ -6,6 +6,10 @@ const productRouterMDB = require("./routes/product.routerMDB.js")
 const messageRouterMDB = require("./routes/message.routerMDB.js")
 const cartsRouterMDB = require("./routes/carts.routerMDB.js")
 const viewRouter = require("./routes/views.router.js")
+const productManagerMongo = require("./dao/producManagerMDB.js");
+const productManager = new productManagerMongo();
+const messageMongo = require("./dao/messageManagerMDB.js");
+const messageManager = new messageMongo()
 const Server = require('socket.io');
 const dotenv = require ('dotenv')
 dotenv.config()
@@ -20,6 +24,7 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine','handlebars')
 app.use(express.static(__dirname + '/public'))
+
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
@@ -37,4 +42,34 @@ mongoose.connect(process.env.MONGO_URL)
 
 socketServer.on('connection', socket =>{
     console.log(" Nuevo cliente conectado")
+
+    messageManager.readMessage()
+    .then((messages) =>{
+        socket.emit('messages', messages)
+    })
+    socket.on('NewMessage', (user, message) =>{
+        messageManager.createMessage(user , message)
+        .then(() => {
+            messageManager.readMessage()
+            .then((messages) =>{
+                socket.emit('messages', messages)
+                socket.emit('responseAdd', 'Mensaje enviado')
+            })
+        })
+        .catch((error) =>
+            socket.emit('responseAdd', 'Error al enviar el mensaje' + error.message))
+    })
+    socket.on('eliminarMessage', message =>{
+        messageManager.messageDelete(message._id)
+        .then(() =>{
+            messageManager.readMessage()
+            .then((messages) =>{
+                socket.emit('messages', messages)
+                socket.emit('responseDelete', 'Mensaje eliminado')
+            })
+        })
+        .catch((error) => 
+    socket.emit('responseDelete', "Error al eliminar el mensaje" + error.message))
+    })
+
 })
