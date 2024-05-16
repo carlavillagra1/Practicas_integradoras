@@ -13,7 +13,7 @@ class productManagerMongo {
 
     async readProducts() {
         try {
-            const products = await productModel.find()
+            const products = await productModel.find().lean()
             return products
         } catch (error) {
             throw new Error("Error al leer los productos")
@@ -23,7 +23,7 @@ class productManagerMongo {
 
     async getProductById(id) {
         try {
-            const productFound = await productModel.findById(id)
+            const productFound = await productModel.findById(id).lean()
             if (productFound) {
                 return productFound
             }

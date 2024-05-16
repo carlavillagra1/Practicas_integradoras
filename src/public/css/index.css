@@ -1,11 +1,16 @@
 .contenedorForm{
-    background: red;
-    width: 400px;
-    padding: 10px;
+    width: 500px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    justify-content: space-evenly;
+    gap: 10px;
+    background: gray;
 }
 .contenedorChat{
-    background: blue;
+    background: rgb(213, 213, 228);
+    width: 500px;
+    border: 1px gray;
+
 }
