@@ -59,8 +59,8 @@ socketServer.on('connection', socket =>{
         .catch((error) =>
             socket.emit('responseAdd', 'Error al enviar el mensaje' + error.message))
     })
-    socket.on('eliminarMessage', message =>{
-        messageManager.messageDelete(message._id)
+    socket.on('eliminarMessage', (message) =>{
+        messageManager.messageDelete(message)
         .then(() =>{
             messageManager.readMessage()
             .then((messages) =>{

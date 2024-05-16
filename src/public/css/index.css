@@ -1,0 +1,11 @@
+.contenedorForm{
+    background: red;
+    width: 400px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+.contenedorChat{
+    background: blue;
+}

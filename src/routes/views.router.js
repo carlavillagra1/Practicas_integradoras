@@ -1,11 +1,12 @@
 const { Router } = require("express")
 const router = Router()
-const  productManager = require("../dao/producManagerMDB")
+const productManagerMongo = require("../dao/producManagerMDB.js");
+const productManager = new productManagerMongo();
 
 router.get('/' , async(req,res) =>{
     try {
-        const Productos = await productManager.readProducts()
-        res.render("home", { Productos })
+        const productos = await productManager.readProducts()
+        res.render("home", { productos })
     } catch (error) {
         res.status(404).json({message: "Error al obtener los productos"})
     }
@@ -13,7 +14,7 @@ router.get('/' , async(req,res) =>{
 })
 
 router.get('/chat', (req, res) => {
-    res.render("chat", {})
+    res.render('chat', { style:'index.css'})
 })
 
 module.exports = router;
