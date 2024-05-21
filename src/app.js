@@ -73,3 +73,41 @@ socketServer.on('connection', socket =>{
     })
 
 })
+socketServer.on('connection', socket =>{
+    console.log(" Nuevo cliente conectado")
+    
+    productManager.readProducts()
+    .then((products) =>{
+    socket.emit('products', products)
+    })
+    socket.on('NewProduct', (product) =>{
+        console.log(product)
+    productManager.createProduct( 
+        product.title, product.description, product.price, product.thumbnail, 
+        product.code, product.stock, product.category)
+    .then(() => {
+        productManager.readProducts()
+        .then((products) =>{
+            socket.emit('products', products)
+            socket.emit('responseAdd', "Producto agregado")
+        })
+    })
+    
+    .catch((error) => 
+        socket.emit('responseAdd', "Error al agregar el producto" + error.message ))
+    }) 
+    
+    socket.on('eliminarProduct', product =>{
+    productManager.deleteProduct(product)
+    .then(() => {
+        productManager.readProducts()
+        .then((products) =>{
+            socket.emit('products', products)
+            socket.emit('responseDelete', "Producto eliminado")
+        })
+    })
+    .catch((error) => 
+    socket.emit('responseDelete', "Error al eliminar el producto" + error.message))
+    
+    })
+})
