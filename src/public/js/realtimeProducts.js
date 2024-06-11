@@ -11,7 +11,8 @@ btnAgregar.addEventListener('click', () =>{
     const thumbnail = document.getElementById('thumbnail').value
     const code = document.getElementById('code').value
     const stock = document.getElementById('stock').value
-    socket.emit('NewProduct', {title, description, price, thumbnail, code, stock})
+    const category  = document.getElementById('category').value
+    socket.emit('NewProduct', {title, description, price, thumbnail, code, stock, category})
 })
 socket.on('products', products =>{
     ListProducts.innerHTML = ``
@@ -29,7 +30,8 @@ socket.on('products', products =>{
         <strong>Descripcion: </strong>${product.description},
         <strong>Precio: </strong>${product.price},
         <strong>Codigo: </strong>${product.code},
-        <strong>Stock: </strong>${product.stock}
+        <strong>Stock: </strong>${product.stock},
+        <strong>categoria: </strong>${product.category}
         `
         ListProducts.appendChild(p)
         ListProducts.appendChild(btnEliminar)

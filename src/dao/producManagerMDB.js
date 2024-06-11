@@ -1,12 +1,14 @@
 const productModel = require("./models/product.model.js")
+const cartsModel  = require("./models/carts.model.js")
 
 class productManagerMongo {
 
-    async createProduct(title, description, price, thumbnail, code, stock) {
+    async createProduct(title, description, price, thumbnail, code, stock, category) {
         try {
-            const create = await productModel.create({title, description, price, thumbnail, code, stock})
+            const create = await productModel.create({title, description, price, thumbnail, code, stock, category})
             return create
         } catch (error) {
+            console.error("Error al crear el producto:", error.message);
             throw new Error("Error al crear el producto")
         }
     }
@@ -23,15 +25,18 @@ class productManagerMongo {
 
     async getProductById(id) {
         try {
-            const productFound = await productModel.findById(id).lean()
+            const productFound = await productModel.findById(id);
             if (productFound) {
-                return productFound
+                return productFound;
+            } else {
+                throw new Error("El producto no pudo ser encontrado");
             }
         } catch (error) {
-            throw new Error("Error al encontrar el producto")
-
+            throw new Error("Error al encontrar el producto: " + error.message);
         }
     }
+    
+    
     async updateProduct(id) {
         try {
             const productUpdate = await productModel.updateOne({_id: id})
@@ -49,6 +54,85 @@ class productManagerMongo {
             throw new Error("Error al eliminar el producto")
         }
     }
+    async  paginateProduct({ page = 1, limit = 5, sort = '', query = '', categoria = '' }) {
+        try {
+            const match = {};
+            if (categoria) {
+                match.category = categoria;
+            }
+            if (query) {
+                match.title = { $regex: query, $options: 'i' };
+            }
+    
+            const sortOrder = sort === 'desc' ? -1 : 1;
+            const skip = (page - 1) * limit;
+    
+            const productos = await productModel.aggregate([
+                { $match: match },
+                { $sort: { price: sortOrder } },
+                { $skip: skip },
+                { $limit: parseInt(limit) }
+            ]);
+    
+            const totalDocs = await productModel.countDocuments(match);
+            const totalPages = Math.ceil(totalDocs / limit);
+    
+            return {
+                docs: productos,
+                totalDocs,
+                limit,
+                page,
+                totalPages,
+                hasPrevPage: page > 1,
+                hasNextPage: page < totalPages,
+                prevPage: page > 1 ? page - 1 : null,
+                nextPage: page < totalPages ? page + 1 : null,
+            };
+        } catch (error) {
+            throw new Error("Error en paginación de productos: " + error.message);
+        }
+    }
+    
+    
+
+    // Función para filtrar productos por categoría
+    async filterCategory({ categoria, limit = 10, page = 1, sort, query }) {
+        try {
+            const match = { category: categoria };
+            if (query) {
+                match.title = { $regex: query, $options: 'i' };
+            }
+            const sortOrder = sort === 'desc' ? -1 : 1;
+            const skip = (page - 1) * limit;
+    
+            const categorias = await productModel.aggregate([
+                { $match: match },
+                { $sort: { price: sortOrder } },
+                { $skip: skip },
+                { $limit: parseInt(limit) }
+            ]);
+    
+            const totalDocs = await productModel.countDocuments(match);
+            const totalPages = Math.ceil(totalDocs / limit);
+    
+            return {
+                docs: categorias,
+                totalDocs,
+                limit,
+                page,
+                totalPages,
+                hasPrevPage: page > 1,
+                hasNextPage: page < totalPages,
+                prevPage: page > 1 ? page - 1 : null,
+                nextPage: page < totalPages ? page + 1 : null
+            };
+        } catch (error) {
+            throw new Error(`Error en filtrar por categorías: ${error.message}`);
+        }
+    }
+    
 }
+
+
 
 module.exports = productManagerMongo

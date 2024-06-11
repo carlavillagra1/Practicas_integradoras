@@ -1,0 +1,21 @@
+<div class="container">
+    <h4>Carrito de Compras</h4>
+    <ul class="carrito">
+        {{#if cartGroupedProducts.length}}
+                <strong class="total">Total: {{total}}</strong>
+            {{#each cartGroupedProducts}}
+                <li>
+                    <strong>Producto:</strong> {{this.title}}  <strong>Precio:</strong> ${{this.price}} <strong>Cantidad:</strong> {{this.totalQuantity}}
+                    <strong>Subtotal:</strong> {{this.subtotal}} <button class="eliminar-producto" data-product-id="{{this._id}}" data-cart-id="{{cartId}}">Eliminar</button>
+                </li>
+            {{/each}}
+        {{else}}
+            <p>El carrito está vacío.</p>
+        {{/if}}
+    </ul>
+    <div class="volver">
+        <a href="/api/views/home">Volver a home</a>
+    </div>
+</div>
+    <script src="/js/cart.js"></script>
+
