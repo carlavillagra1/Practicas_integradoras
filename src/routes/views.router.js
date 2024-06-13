@@ -29,9 +29,9 @@ router.get('/home', isAuthenticated , async(req, res) => {
 router.get('/productDetail/:id', async (req, res) => {
     try {
         const { id } = req.params
+        const user = req.user;
         const product = await productManager.getProductById(id);
-        if (product)
-            res.render('productDetail', { product, style: 'index.css' });
+        if (product) res.render("productDetail", { user, product, style: "index.css" });
         else
             res.status(404).send('Producto no encontrado');
     } catch (error) {
@@ -51,7 +51,6 @@ router.get('/cart', async (req, res) => {
     try {
         // Obtener el ID del carrito del usuario autenticado
         const cartId = req.user.cart;
-        // Ahora, utilizando el ID del carrito, puedes realizar las operaciones necesarias para mostrar los detalles del carrito en la página
         const cart = await cartManager.cartFindOne(cartId);
         if (!cart || !cart.products || cart.products.length === 0) {
             return res.render('cart', { cartGroupedProducts: [], total: 0, style: 'index.css' });
@@ -74,7 +73,7 @@ router.get('/cart', async (req, res) => {
         }, {});
         const cartGroupedProducts = Object.values(groupedProducts);
         const total = cartGroupedProducts.reduce((acc, item) => acc + item.subtotal, 0);
-        res.render('cart', { cartGroupedProducts, total, style: 'index.css' });
+        res.render('cart', { cartGroupedProducts, cartId, total, style: 'index.css' });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al obtener el carrito');
@@ -93,6 +92,7 @@ router.get('/register', isNotAuthenticated, (req, res) => {
 });
 
 router.get('/profile', isAuthenticated, (req, res) => {
+    console.log('Datos de sesión:', req.session.user);
     res.render('profile', { user: req.session.user });
 });
 

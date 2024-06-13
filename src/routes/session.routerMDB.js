@@ -17,9 +17,10 @@ router.get('/failregister' , async(req,res) =>{
     res.send({error: "Fallo"})
 })
 
-router.post('/login', passport.authenticate('login', {failureRedirect: 'faillogin'}), async (req, res) => {
-    console.log("Usuario autenticado:", req.user); // Verifica si req.user está definido y contiene la información del usuario autenticado
-    if(!req.user) return res.status(400).send({status: "error", error:"Datos incompletos"}) 
+router.post('/login', passport.authenticate('login', { failureRedirect: 'faillogin' }), async (req, res) => {
+    console.log("Usuario autenticado:", req.user);
+    if (!req.user) return res.status(400).send({ status: "error", error: "Datos incompletos" });
+
     try {
         req.session.user = {
             nombre: req.user.nombre,
@@ -28,21 +29,25 @@ router.post('/login', passport.authenticate('login', {failureRedirect: 'faillogi
             age: req.user.age,
             role: req.user.role
         };
-        console.log("Sesión establecida:", req.session.user); // Verifica si la sesión del usuario se establece correctamente
-        // Redirigir basado en el rol del usuario
-        console.log("Redirigiendo a admin:", req.user); // Verifica si se redirige correctamente a la página de admin
-        if (req.user.role === 'admin') {
-            return res.redirect('/api/views/realtimeProducts');
-        } else {
-            console.log("Redirigiendo a home:", req.user); // Verifica si se redirige correctamente a la página de inicio
-            return res.redirect('/api/views/home');
-        }
+        console.log("Datos de sesión:", req.session.user);
 
+        req.session.save((err) => {
+            if (err) {
+                console.error("Error guardando sesión:", err);
+                return res.status(500).send('Error al guardar sesión');
+            }
+
+            if (req.user.role === 'admin') {
+                return res.redirect('/api/views/realtimeProducts');
+            } else {
+                return res.redirect('/api/views/home');
+            }
+        });
     } catch (err) {
-        console.error("Error al establecer la sesión:", err); // Manejo de errores al establecer la sesión del usuario
         res.status(500).send('Error al iniciar sesión');
     }
 });
+
 router.get('/faillogin' , async(req,res) =>{
     console.log("login fallido")
     res.send({error: "Login fallido"})

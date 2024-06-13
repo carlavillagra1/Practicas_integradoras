@@ -50,8 +50,8 @@ router.post('/', async (req, res) => {
 });
 router.delete("/:cid/product/:id", async (req, res) => {
     try {
-        const { cid, id } = req.params;
-        const cart = await cartManager.cartById(cid);
+        const {  cid , id } = req.params;
+        const cart = await cartManager.cartById( cid);
         if (!cart) {
             return res.status(404).json({ message: "Carrito no encontrado" });
         }
