@@ -62,6 +62,7 @@ router.get('/cart', async (req, res) => {
                 acc[productId] = {
                     title: item.product.title,
                     price: item.product.price,
+                    thumbnail: item.product.thumbnail,
                     totalQuantity: 0,
                     subtotal: 0,
                     _id: productId // Agregar el _id del producto al objeto
@@ -93,7 +94,7 @@ router.get('/register', isNotAuthenticated, (req, res) => {
 
 router.get('/profile', isAuthenticated, (req, res) => {
     console.log('Datos de sesión:', req.session.user);
-    res.render('profile', { user: req.session.user });
+    res.render('profile', {  style:'index.css', user: req.session.user });
 });
 
 module.exports = router;

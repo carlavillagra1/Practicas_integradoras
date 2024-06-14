@@ -1,5 +1,4 @@
 const isAuthenticated = (req, res, next) => {
-    console.log('Verificando autenticación:', req.isAuthenticated(), req.session.user);
     if (req.session.user) {
         return next();
     } else {
