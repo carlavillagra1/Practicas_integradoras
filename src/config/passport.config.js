@@ -2,7 +2,7 @@ const passport = require('passport')
 const local = require('passport-local')
 const githubStrategy = require('passport-github2')
 const User = require('../dao/models/user.model.js')
-const { createHash, isValidPassword } = require('../public/js/utils.js')
+const logger = require('../utils/logger.js')
 const dotenv = require('dotenv');
 dotenv.config()
 
@@ -34,6 +34,7 @@ const initializePassport = () => {
                 done(null, user)
             }
         } catch (error) {
+            logger.error('Error al ingresar con github' + error.message)
             done(error)
         }
 
@@ -46,25 +47,42 @@ const initializePassport = () => {
             try {
                 let user = await User.findOne({ email: username })
                 if (user) {
-                    console.log("El usuario ya existe")
+                    logger.warning("El usuario ya existe")
                     return done(null, false)
                 }
-                const hashedPassword = createHash(password);
                 const newUser = {
                     nombre,
                     apellido,
                     email,
                     age,
                     role,
-                    password: hashedPassword
+                    password
                 };
                 let result = await User.create(newUser)
                 return done(null, result)
             } catch (error) {
+                logger.error('Error al obtener el usuario' + error.message)
                 return done("Error al obtener el usuario" + error)
             }
         }
-    ))
+        ))
+        passport.use('login', new localStrategy({usernameField:'email'}, async(username, password, done) =>{
+            try {
+                const user = await User.findOne({email: username})
+                if(!user){
+                    logger.warning("El usuario no existe")
+                    return done(null, user)
+                }
+        const isMatch = await user.comparePassword(password);
+        console.log('¿Las contraseñas coinciden?', isMatch);
+        if (!isMatch) {
+            return done(null, false);
+        }
+                return done(null, user)
+            } catch (error) {
+                return done(error)
+            }
+        }))
     passport.serializeUser((user, done) => {
         done(null, user._id)
     })
@@ -73,21 +91,6 @@ const initializePassport = () => {
         done(null, user)
     })
 
-    passport.use('login', new localStrategy({usernameField:'email'}, async(username, password, done) =>{
-        try {
-            const user = await User.findOne({email: username})
-            if(!user){
-                console.log("El usuario no existe")
-                return done(null, user)
-            }
-            if (!user.comparePassword(password)) {
-                return done(null, false, { message: 'Contraseña incorrecta' });
-            }
-            return done(null, user)
-        } catch (error) {
-            return done(error)
-        }
-    }))
 }
     
 
