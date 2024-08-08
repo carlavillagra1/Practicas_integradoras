@@ -1,7 +1,7 @@
 const passport = require('passport')
 const local = require('passport-local')
 const githubStrategy = require('passport-github2')
-const User = require('../dao/models/user.models.js')
+const User = require('../dao/models/user.model.js')
 const { createHash, isValidPassword } = require('../public/js/utils.js')
 const dotenv = require('dotenv');
 dotenv.config()
@@ -73,21 +73,23 @@ const initializePassport = () => {
         done(null, user)
     })
 
-    passport.use('login', new localStrategy({ usernameField: 'email' }, async (username, password, done) => {
+    passport.use('login', new localStrategy({usernameField:'email'}, async(username, password, done) =>{
         try {
-            const user = await User.findOne({ email: username });
-            if (!user) {
-                console.log("El usuario no existe");
-                return done(null, false);
+            const user = await User.findOne({email: username})
+            if(!user){
+                console.log("El usuario no existe")
+                return done(null, user)
             }
             if (!user.comparePassword(password)) {
                 return done(null, false, { message: 'Contraseña incorrecta' });
             }
-            return done(null, user);
+            return done(null, user)
         } catch (error) {
-            return done(error);
+            return done(error)
         }
     }))
 }
+    
+
 
 module.exports = { initializePassport }

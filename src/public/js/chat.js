@@ -1,5 +1,3 @@
-const socket = io()
-const messagesList= document.getElementById('messagesList')
 const mensaje = document.createElement('p') 
 const btnEnviar = document.getElementById('btnAgregar')
 

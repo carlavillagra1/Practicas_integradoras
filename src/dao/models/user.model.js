@@ -14,14 +14,7 @@ const userSchema = new mongoose.Schema({
     cart: { type: mongoose.Schema.Types.ObjectId, ref: 'carts' }
 });
 
-/*
-userSchema.pre('findOne', function() {
-    this.populate('carts.cart');
-});
-userSchema.pre('findById', function() {
-    this.populate('carts.cart');
-});
-*/
+
 userSchema.pre('save', async function (next) {
     // Verifica si el usuario ya tiene un carrito asignado
     if (!this.cart) {
@@ -58,9 +51,5 @@ userSchema.methods.comparePassword = function (candidatePassword) {
 const userModel = mongoose.model(userCollection, userSchema);
 
 module.exports = userModel;
-
-
-
-
 
 

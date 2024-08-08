@@ -1,27 +1,33 @@
 const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
 const handlebars = require('express-handlebars');
 const productRouterMDB = require('./routes/product.routerMDB.js');
 const messageRouterMDB = require('./routes/message.routerMDB.js');
 const cartsRouterMDB = require('./routes/carts.routerMDB.js');
 const sessionRouter = require('./routes/session.routerMDB.js')
 const viewRouter = require('./routes/views.router.js');
-const productManagerMongo = require('./dao/producManagerMDB.js');
-const productManager = new productManagerMongo();
-const messageMongo = require('./dao/messageManagerMDB.js');
-const messageManager = new messageMongo();
+const ticketRouter = require('./routes/ticket.routerMDB.js')
+const mockingRouter = require("./routes/mocking.router.js")
+const loggerRouter = require('./routes/loggerTest.router.js')
+const db = require('./config/database.js')
 const passport = require('passport')
 const { initializePassport } = require('./config/passport.config.js')
 const dotenv = require('dotenv');
+const  { faker } = require("@faker-js/faker")
+const path = require('path')
 const session = require('express-session')
-const db = require('./config/database.js')
 const MongoStore = require('connect-mongo')
 const Server = require('socket.io');
-const app = express();
+const initializeSocket = require('./config/socket.js'); 
+const errorHandler = require('./middlewares/index.js')
+const logger = require('./utils/logger.js')
 const port = 8080;
 dotenv.config()
 
 const httpServer = app.listen(port, console.log(`Server running on port ${port}`));
-const socketServer = Server(httpServer);
+// Inicializar sockets
+initializeSocket(httpServer);
 
 const hbs = handlebars.create({
     runtimeOptions: {
@@ -30,6 +36,8 @@ const hbs = handlebars.create({
     }
 });
 
+initializePassport()
+
 app.use(session({
     secret: 'secretkey',
     resave: false,
@@ -37,8 +45,6 @@ app.use(session({
     store: MongoStore.create({ mongoUrl: process.env.MONGODB }),
     // cookie: { maxAge: 180 * 60 * 1000 } // 3 horas
 }));
-
-initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -50,82 +56,17 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
 app.use('/api/product', productRouterMDB);
 app.use('/api/message', messageRouterMDB);
 app.use('/api/carts', cartsRouterMDB);
 app.use('/api/views', viewRouter);
 app.use('/api/session', sessionRouter);
+app.use('/api/tickets', ticketRouter);
+app.use('/api/mocking', mockingRouter)
+app.use('/api/logger', loggerRouter)
 
+app.use(errorHandler)
 
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
+console.log(`Entorno actual: ${process.env.NODE_ENV}`);
 
-
-socketServer.on('connection', socket => {
-    console.log('Nuevo cliente conectado');
-
-    messageManager.readMessage()
-        .then((messages) => {
-            socket.emit('messages', messages);
-        });
-    socket.on('NewMessage', (user, message) => {
-        messageManager.createMessage(user, message)
-            .then(() => {
-                messageManager.readMessage()
-                    .then((messages) => {
-                        socket.emit('messages', messages);
-                        socket.emit('responseAdd', 'Mensaje enviado');
-                    });
-            })
-            .catch((error) =>
-                socket.emit('responseAdd', 'Error al enviar el mensaje' + error.message));
-    });
-    socket.on('eliminarMessage', (message) => {
-        messageManager.messageDelete(message)
-            .then(() => {
-                messageManager.readMessage()
-                    .then((messages) => {
-                        socket.emit('messages', messages);
-                        socket.emit('responseDelete', 'Mensaje eliminado');
-                    });
-            })
-            .catch((error) =>
-                socket.emit('responseDelete', 'Error al eliminar el mensaje' + error.message));
-    });
-});
-
-socketServer.on('connection', socket => {
-    console.log('Nuevo cliente conectado');
-
-    productManager.readProducts()
-        .then((products) => {
-            socket.emit('products', products);
-        });
-    socket.on('NewProduct', (product) => {
-        console.log(product);
-        productManager.createProduct(
-            product.title, product.description, product.price, product.thumbnail,
-            product.code, product.stock, product.category)
-            .then(() => {
-                productManager.readProducts()
-                    .then((products) => {
-                        socket.emit('products', products);
-                        socket.emit('responseAdd', 'Producto agregado');
-                    });
-            })
-            .catch((error) =>
-                socket.emit('responseAdd', 'Error al agregar el producto' + error.message));
-    });
-
-    socket.on('eliminarProduct', product => {
-        productManager.deleteProduct(product)
-            .then(() => {
-                productManager.readProducts()
-                    .then((products) => {
-                        socket.emit('products', products);
-                        socket.emit('responseDelete', 'Producto eliminado');
-                    });
-            })
-            .catch((error) =>
-                socket.emit('responseDelete', 'Error al eliminar el producto' + error.message));
-    });
-});

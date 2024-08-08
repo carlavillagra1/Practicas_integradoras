@@ -1,0 +1,58 @@
+{"level":"error","message":"Prueba de nivel error","timestamp":"2024-08-01T15:19:24.114Z"}
+{"level":"fatal","message":"Prueba de nivel fatal","timestamp":"2024-08-01T15:19:24.120Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-01T15:19:54.941Z"}
+{"level":"error","message":"Error al restablecer la contraseña: jwt malformed","timestamp":"2024-08-05T21:29:38.267Z"}
+{"level":"error","message":"Error al restablecer la contraseña: jwt malformed","timestamp":"2024-08-05T22:13:29.131Z"}
+{"level":"error","message":"Error al restablecer la contraseña: jwt malformed","timestamp":"2024-08-05T22:35:51.911Z"}
+{"level":"error","message":"Error al restablecer la contraseña: invalid token","timestamp":"2024-08-05T22:39:26.354Z"}
+{"level":"error","message":"Error al restablecer la contraseña: invalid token","timestamp":"2024-08-05T22:43:20.318Z"}
+{"level":"error","message":"Error al restablecer la contraseña: invalid token","timestamp":"2024-08-05T22:45:07.343Z"}
+{"level":"error","message":"Error al restablecer la contraseña: invalid token","timestamp":"2024-08-05T22:49:09.068Z"}
+{"level":"error","message":"Error al restablecer la contraseña: invalid token","timestamp":"2024-08-05T22:52:31.496Z"}
+{"level":"error","message":"Error al restablecer la contraseña: invalid token","timestamp":"2024-08-05T22:55:16.651Z"}
+{"level":"error","message":"Error al obtener el producto: Error al encontrar el producto: Cast to ObjectId failed for value \"filtrar\" (type string) at path \"_id\" for model \"products\"","timestamp":"2024-08-06T15:56:45.797Z"}
+{"level":"error","message":"Error al obtener el productoError al obtener el producto: Error al encontrar el producto: Cast to ObjectId failed for value \"filtrar\" (type string) at path \"_id\" for model \"products\"","timestamp":"2024-08-06T15:56:45.802Z"}
+{"level":"error","message":"Error al encontrar el productoID no válido","timestamp":"2024-08-06T16:36:39.918Z"}
+{"level":"error","message":"Error al obtener el producto: Error al encontrar el producto: ID no válido","timestamp":"2024-08-06T16:36:39.922Z"}
+{"level":"error","message":"Error al obtener el productoError al obtener el producto: Error al encontrar el producto: ID no válido","timestamp":"2024-08-06T16:36:39.923Z"}
+{"level":"error","message":"Error al filtrar los productos por categoría: productService.filterCategory is not a function","timestamp":"2024-08-06T18:07:28.467Z"}
+{"level":"error","message":"Error al encontrar el productoID no válido","timestamp":"2024-08-06T18:07:32.092Z"}
+{"level":"error","message":"Error al obtener el producto: Error al encontrar el producto: ID no válido","timestamp":"2024-08-06T18:07:32.097Z"}
+{"level":"error","message":"Error al obtener el productoError al obtener el producto: Error al encontrar el producto: ID no válido","timestamp":"2024-08-06T18:07:32.099Z"}
+{"level":"error","message":"Error al encontrar el productoID no válido","timestamp":"2024-08-06T18:09:48.751Z"}
+{"level":"error","message":"Error al obtener el producto: Error al encontrar el producto: ID no válido","timestamp":"2024-08-06T18:09:48.835Z"}
+{"level":"error","message":"Error al obtener el productoError al obtener el producto: Error al encontrar el producto: ID no válido","timestamp":"2024-08-06T18:09:48.877Z"}
+{"level":"error","message":"Error al encontrar el productoID no válido","timestamp":"2024-08-06T18:13:11.646Z"}
+{"level":"error","message":"Error al obtener el producto: Error al encontrar el producto: ID no válido","timestamp":"2024-08-06T18:13:11.653Z"}
+{"level":"error","message":"Error al obtener el productoError al obtener el producto: Error al encontrar el producto: ID no válido","timestamp":"2024-08-06T18:13:11.655Z"}
+{"level":"error","message":"Error al crear el ticketerror is not defined","timestamp":"2024-08-06T20:55:11.699Z"}
+{"level":"error","message":"Error al realizar la compra:Error al crear el ticket: error is not defined","timestamp":"2024-08-06T20:55:11.707Z"}
+{"level":"error","message":"Error al crear el ticketerror is not defined","timestamp":"2024-08-06T21:00:01.250Z"}
+{"level":"error","message":"Error al realizar la compra:Error al crear el ticket: error is not defined","timestamp":"2024-08-06T21:00:01.257Z"}
+{"level":"error","message":"Usuario o carrito no encontrado","timestamp":"2024-08-06T21:14:23.014Z"}
+{"level":"error","message":"Error al crear el ticket: Usuario o carrito no encontrado","timestamp":"2024-08-06T21:14:23.026Z"}
+{"level":"error","message":"Error al realizar la compra: Error al crear el ticket: Usuario o carrito no encontrado","timestamp":"2024-08-06T21:14:23.028Z"}
+{"level":"error","message":"Error al crear el ticket: Error al obtener el carrito del usuario: Cast to ObjectId failed for value \"{\n  id: '66b282bb62498f86767d8253',\n  nombre: 'juli',\n  apellido: 'navarro',\n  email: 'julietaenavarro2@gmail.com',\n  age: 19,\n  role: 'user'\n}\" (type Object) at path \"_id\" for model \"Users\"","timestamp":"2024-08-06T21:15:35.930Z"}
+{"level":"error","message":"Error al realizar la compra: Error al crear el ticket: Error al obtener el carrito del usuario: Cast to ObjectId failed for value \"{\n  id: '66b282bb62498f86767d8253',\n  nombre: 'juli',\n  apellido: 'navarro',\n  email: 'julietaenavarro2@gmail.com',\n  age: 19,\n  role: 'user'\n}\" (type Object) at path \"_id\" for model \"Users\"","timestamp":"2024-08-06T21:15:35.938Z"}
+{"level":"error","message":"Usuario o carrito no encontrado","timestamp":"2024-08-06T21:16:58.657Z"}
+{"level":"error","message":"Error al crear el ticket: Usuario o carrito no encontrado","timestamp":"2024-08-06T21:16:58.664Z"}
+{"level":"error","message":"Error al realizar la compra: Error al crear el ticket: Usuario o carrito no encontrado","timestamp":"2024-08-06T21:16:58.665Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:07:16.515Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:07:27.229Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:12:28.910Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:12:37.333Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:12:52.809Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:15:55.272Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:16:04.003Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:16:47.412Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:18:43.087Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:18:54.904Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:22:52.167Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:23:04.807Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:24:32.917Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:24:42.098Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:28:03.180Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:29:35.920Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:36:00.198Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:36:32.880Z"}
+{"level":"error","message":"Login fallido","timestamp":"2024-08-08T13:40:09.071Z"}

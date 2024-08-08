@@ -1,7 +1,7 @@
 const cartsModel  = require("./models/carts.model.js")
 const productModel = require("./models/product.model.js")
 
-class cartManagerMongo{
+class cartRepository{
     
     async createCart(products = [] , total = 0 ){
         try {
@@ -63,13 +63,26 @@ class cartManagerMongo{
                 { _id: cid },
                 { $set: { products: updatedCart.products } }
             );
-            console.log('Cart updated:', cartUpdate); // Log para verificar la actualización
             return cartUpdate;
         } catch (error) {
-            console.error('Error updating cart:', error); // Log de error
             throw new Error("Error al actualizar el carrito");
         }
     }
-    
+
+    async clearCartProducts(cid) {
+        try {
+            const cart = await cartsModel.findById(cid) 
+            if (!cart) {
+                throw new Error('Carrito no encontrado');
+            }
+            cart.products = []; 
+            await cart.save();  
+            return cart;
+        } catch (error) {
+            console.error('Error al vaciar el carrito:', error);
+            throw error;
+        }
+    };
 }
-module.exports = cartManagerMongo
+    
+module.exports = cartRepository

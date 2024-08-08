@@ -4,13 +4,22 @@ async function filtrarProductos(page = 1) {
     const query = document.getElementById('query-input').value || '';
     const sort = document.getElementById('sort-select').value || '';
 
-    // Actualizar la URL del navegador
-    const newUrl = `/home?categoria=${categoria}&limit=${limit}&page=${page}&sort=${sort}&query=${query}`;
+    // Construir la URL del navegador
+    let newUrl = `/home?limit=${limit}&page=${page}&sort=${sort}&query=${query}`;
+    if (categoria !== 'products') {
+        newUrl += `&categoria=${categoria}`;
+    }
     history.pushState(null, '', newUrl);
 
-
     try {
-        const response = await fetch(`/api/product/filtrar/${categoria}?limit=${limit}&page=${page}&sort=${sort}&query=${query}`);
+        // Construir la URL para la consulta al servidor
+        let fetchUrl = `/api/product/filtrar`;
+        if (categoria !== 'products') {
+            fetchUrl += `/${categoria}`;
+        }
+        fetchUrl += `?limit=${limit}&page=${page}&sort=${sort}&query=${query}`;
+
+        const response = await fetch(fetchUrl);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -19,8 +28,10 @@ async function filtrarProductos(page = 1) {
         const productosContainer = document.getElementById('productos');
         const contenedorPrincipal = document.getElementById('contenedorPrincipal');
         productosContainer.innerHTML = '';  // Limpiar contenedor
+        console.log('Datos recibidos del servidor:', result);
 
         if (result.docs.length === 0) {
+            console.log('No hay productos para mostrar');
             productosContainer.innerHTML = '<h1>No hay productos para mostrar</h1>';
             contenedorPrincipal.classList.remove('hidden');  // Mostrar contenedor principal
             return;
@@ -34,10 +45,10 @@ async function filtrarProductos(page = 1) {
             productDiv.classList.add('carts');
 
             const thumbnail = document.createElement('img');
-                    thumbnail.classList.add('infoFoto');
-                    thumbnail.src = producto.thumbnail[0];
-                    thumbnail.alt = producto.title;
-                    productDiv.appendChild(thumbnail);
+            thumbnail.classList.add('infoFoto');
+            thumbnail.src = producto.thumbnail[0];
+            thumbnail.alt = producto.title;
+            productDiv.appendChild(thumbnail);
 
             const title = document.createElement('strong');
             title.classList.add('info');
@@ -89,9 +100,8 @@ async function filtrarProductos(page = 1) {
         }
         productosContainer.appendChild(paginateDiv);
         
-
-
-    } catch (error) {
+    }    
+    catch (error) {
         document.getElementById('productos').innerHTML = "<h1>Error al filtrar productos</h1>";
     }
 }
